@@ -6,13 +6,13 @@ import java.util.Scanner;
 public class User {
     // Create attributes
     private int userID;
-    private String UserName;
-    private String Email;
+    private String userName;
+    private String email;
 
     // Initialization
-    public User(String UserName, String Email) {
-        this.UserName = UserName;
-        this.Email = Email;
+    public User(String userName, String email) {
+        this.userName = userName;
+        this.email = email;
     }
 
     // Registration method
@@ -21,7 +21,7 @@ public class User {
             dbManager.connect();
             User user = new User(getUserName, getEmail);
             User createdUser = dbManager.createUser(user);
-            System.out.println("\u001B[32mUser successfully created: \u001B[0m\u001B[34m" + UserName + "\u001B[0m\u001B[32m!\u001B[0m");
+            System.out.println("\u001B[32mUser successfully created: \u001B[0m\u001B[34m" + userName + "\u001B[0m\u001B[32m!\u001B[0m");
             System.out.println("-------------------------------------------------------------------------");
         } catch (SQLException e) {
             // Uniqueness error
@@ -42,7 +42,7 @@ public class User {
             User user = new User(getUserName, getEmail);
             User log = dbManager.findUser(user);
             if (log != null) {
-                System.out.println("\u001B[32mLogin successful! Welcome back, \u001B[0m\u001B[32m" + UserName + "\u001B[0m \uD83D\uDE03");
+                System.out.println("\u001B[32mLogin successful! Welcome back, \u001B[0m\u001B[32m" + userName + "\u001B[0m \uD83D\uDE03");
             } else {
                 System.err.println("\u001B[31mInvalid username or email. Please try again.\u001B[0m");
             }
@@ -55,9 +55,8 @@ public class User {
     // Getters and setters for user
     public int getUserID() {return userID;}
     public void setUserID(int userID) {this.userID = userID;}
-    public String getUserName() { return UserName; }
-    public void setUserName(String firstName) {this.UserName = UserName; }
-    public String getEmail() { return Email; }
-    public void setEmail(String lastName) { this.Email = Email; }
+    public String getUserName() { return userName; }
+    public void setUserName(String firstName) {this.userName = userName; }
+    public String getEmail() { return email; }
+    public void setEmail(String lastName) { this.email = email; }
 }
-
