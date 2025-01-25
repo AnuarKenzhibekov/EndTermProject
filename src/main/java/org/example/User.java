@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class User {
     // Create attributes
+    private int userID;
     private String UserName;
     private String Email;
 
@@ -15,38 +16,45 @@ public class User {
     }
 
     // Registration method
-    public void userRegistration() {
+    public void userRegistration(String getUserName, String getEmail) {
         try (DatabaseManager dbManager = new DatabaseManager()) {
             dbManager.connect();
-            User user = dbManager.createUser(UserName, Email);
-            System.out.println("\u001B[32mUser successfully created: \u001B[0m" + UserName + "\u001B[!\u001B[0m");
+            User user = new User(getUserName, getEmail);
+            User createdUser = dbManager.createUser(user);
+            System.out.println("\u001B[32mUser successfully created: \u001B[0m\u001B[34m" + UserName + "\u001B[0m\u001B[32m!\u001B[0m");
+            System.out.println("-------------------------------------------------------------------------");
         } catch (SQLException e) {
             // Uniqueness error
             if ("23505".equals(e.getSQLState())) {
-                System.err.println("User already exists.");
+                System.out.println("-------------------------------------------------------------------------");
+                System.err.println("\u001B[31mUser already exists.\u001B[0m");
             } else {
-                System.err.println("Error: " + e.getMessage());
+                System.out.println("-------------------------------------------------------------------------");
+                System.err.println("\u001B[31mError: \u001B[0m\u001B[32m" + e.getMessage() + "\u001B[0m");
             }
         }
     }
 
     // Login method
-    public void userLogin(String UserName, String Email) {
+    public void userLogin(String getUserName, String getEmail) {
         try (DatabaseManager dbManager = new DatabaseManager()) {
             dbManager.connect();
-            User log = dbManager.findUser(UserName, Email);
+            User user = new User(getUserName, getEmail);
+            User log = dbManager.findUser(user);
             if (log != null) {
-                System.out.println("Login successful! Welcome back, " + UserName);
+                System.out.println("\u001B[32mLogin successful! Welcome back, \u001B[0m\u001B[32m" + UserName + "\u001B[0m \uD83D\uDE03");
             } else {
-                System.err.println("Invalid username or email. Please try again.");
+                System.err.println("\u001B[31mInvalid username or email. Please try again.\u001B[0m");
             }
         } catch (SQLException e) {
-            System.err.println("Error during database interaction: " + e.getMessage());
+            System.err.println("\u001B[31mError during database interaction: \u001B[0m\u001B[31m" + e.getMessage() + "\u001B[0m");
         }
     }
 
 
     // Getters and setters for user
+    public int getUserID() {return userID;}
+    public void setUserID(int userID) {this.userID = userID;}
     public String getUserName() { return UserName; }
     public void setUserName(String firstName) {this.UserName = UserName; }
     public String getEmail() { return Email; }

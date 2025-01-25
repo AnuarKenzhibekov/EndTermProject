@@ -1,30 +1,25 @@
 package org.example;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
 
 public class Reviews {
-    private String userId;
+    private String userName;
     private String feedback;
-    private int rating;
+    private int grade;
 
-    public Reviews(String userId, String feedback, int rating) {
-        this.userId = userId;
+    public Reviews(String userName, String feedback, int grade) {
+        this.userName = userName;
         this.feedback = feedback;
-        this.rating = rating;
+        this.grade = grade;
     }
 
-
-    public String getUserId() {
-        return userId;
+    public String getUserName() {
+        return userName;
     }
 
     public String getFeedback() {
         return feedback;
     }
 
-    public int getRating() {
-        return rating;
+    public int getGrade() {
+        return grade;
     }
 }
-
-
