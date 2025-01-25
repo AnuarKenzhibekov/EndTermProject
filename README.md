@@ -1,0 +1,1 @@
+The Movie Ticket Booking System allows users to view movie showtimes, select seats, and make payments for tickets. This system requires a robust architecture to ensure scalability, modularity, and support for future extensions.
