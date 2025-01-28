@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.*;
 
 public class DatabaseManager implements AutoCloseable {
@@ -10,7 +12,8 @@ public class DatabaseManager implements AutoCloseable {
 
     private static final String INSERT_USER = "INSERT INTO users(username, email) VALUES (?, ?) RETURNING user_id";
     private static final String SELECT_USER = "SELECT * FROM users WHERE username = ? AND email = ?";
-    private static final String SELECT_REVIEWS = "SELECT u.userName, tr.feedback, tr.grade " + "FROM users u " + "JOIN theater_reviews tr ON u.user_id = tr.user_id " + "WHERE u.user_id = ?";;
+    private static final String SELECT_REVIEWS = "SELECT u.userName, tr.feedback, tr.grade " + "FROM users u " + "JOIN theater_reviews tr ON u.user_id = tr.user_id " + "WHERE u.user_id = ?";
+    private static final String SELECT_MOVIES = "SELECT title, genre, duration FROM movies";
 
     private Connection connection;
 
@@ -78,6 +81,24 @@ public class DatabaseManager implements AutoCloseable {
                 }
             }
         }
+    }
+
+    public List<Movies> getAllMovies() throws SQLException {
+        List<Movies> moviesList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(SELECT_MOVIES)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String title = rs.getString("title");
+                    String genre = rs.getString("genre");
+                    String duration = rs.getString("duration");
+
+                    moviesList.add(new Movies(title, genre, duration));
+                } else {
+                    return null;
+                }
+            }
+        }
+        return moviesList;
     }
 
 

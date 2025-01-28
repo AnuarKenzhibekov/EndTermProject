@@ -2,6 +2,8 @@ package org.example;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User {
     // Create attributes
@@ -41,8 +43,22 @@ public class User {
             dbManager.connect();
             User user = new User(getUserName, getEmail);
             User log = dbManager.findUser(user);
+
+            List<Movies> movies = dbManager.getAllMovies();
             if (log != null) {
                 System.out.println("\u001B[32mLogin successful! Welcome back, \u001B[0m\u001B[32m" + userName + "\u001B[0m \uD83D\uDE03");
+                System.out.println("-------------------------------------------------------------------------");
+
+                if (movies.isEmpty()) {
+                    System.out.println("\u001B[33mNo movies available.\u001B[0m");
+                } else {
+                    System.out.println("\u001B[32mAvailable Movies:\u001B[0m");
+                    for (Movies movie : movies) {
+                        System.out.println("Title: " + movie.getTitle() +
+                                ", Genre: " + movie.getGenre() +
+                                ", Duration: " + movie.getDuration());
+                    }
+                }
             } else {
                 System.err.println("\u001B[31mInvalid username or email. Please try again.\u001B[0m");
             }
