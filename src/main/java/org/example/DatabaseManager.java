@@ -87,14 +87,13 @@ public class DatabaseManager implements AutoCloseable {
         List<Movies> moviesList = new ArrayList<>();
         try (PreparedStatement stmt = connection.prepareStatement(SELECT_MOVIES)) {
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
+                while (rs.next()) {
                     String title = rs.getString("title");
                     String genre = rs.getString("genre");
                     String duration = rs.getString("duration");
 
                     moviesList.add(new Movies(title, genre, duration));
-                } else {
-                    return null;
+
                 }
             }
         }

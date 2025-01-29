@@ -30,6 +30,7 @@ public class Movies {
     }
 
 
+
     public String getTitle() {
         return title;
     }
