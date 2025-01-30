@@ -52,12 +52,7 @@ public class User {
                 if (movies.isEmpty()) {
                     System.out.println("\u001B[33mNo movies available.\u001B[0m");
                 } else {
-                    System.out.println("\u001B[32mAvailable Movies:\u001B[0m");
-                    for (Movies movie : movies) {
-                        System.out.println("Title: " + movie.getTitle() +
-                                ", Genre: " + movie.getGenre() +
-                                ", Duration: " + movie.getDuration());
-                    }
+                    Movies.displayAllMovies();
                 }
             } else {
                 System.err.println("\u001B[31mInvalid username or email. Please try again.\u001B[0m");

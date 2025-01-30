@@ -14,15 +14,16 @@ public class Movies {
         this.duration = duration;
     }
 
-    public void displayAllMovies() {
+    public static void displayAllMovies() {
         try {
             DatabaseManager dbManager = new DatabaseManager();
             List<Movies> movies = dbManager.getAllMovies();
-            System.out.println("Available Movies:");
+            System.out.println("\u001B[32mAvailable Movies:\u001B[0m");
+            System.out.println("-------------------------------------------------------------------------");
             for (Movies movie : movies) {
-                System.out.println("Title: " + movie.getTitle() +
+                System.out.println("\u001B[34mTitle: " + movie.getTitle() +
                         ", Genre: " + movie.getGenre() +
-                        ", Duration: " + movie.getDuration());
+                        ", Duration: " + movie.getDuration() + "\u001B[0m");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
