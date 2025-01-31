@@ -53,6 +53,7 @@ public class Main {
             System.out.println("-------------------------------------------------------------------------");
 
             User user = new User(name, email);
+            user.userRegistration(name, email);
 
         } else if (choice.equalsIgnoreCase("Login")) {
             System.out.println("-------------------------------------------------------------------------");

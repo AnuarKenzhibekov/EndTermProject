@@ -25,6 +25,7 @@ public class User {
             User createdUser = dbManager.createUser(user);
             System.out.println("\u001B[32mUser successfully created: \u001B[0m\u001B[34m" + userName + "\u001B[0m\u001B[32m!\u001B[0m");
             System.out.println("-------------------------------------------------------------------------");
+            Movies.displayAllMovies();
         } catch (SQLException e) {
             // Uniqueness error
             if ("23505".equals(e.getSQLState())) {
