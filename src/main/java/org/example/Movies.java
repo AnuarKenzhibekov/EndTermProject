@@ -30,6 +30,10 @@ public class Movies {
         }
     }
 
+    public static void askAboutMovie() {
+
+    }
+
 
 
     public String getTitle() {
