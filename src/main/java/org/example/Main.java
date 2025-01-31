@@ -46,10 +46,29 @@ public class Main {
 
         if (choice.equalsIgnoreCase("Registration")) {
             System.out.println("-------------------------------------------------------------------------");
-            System.out.print("\u001B[32mEnter your name: \u001B[0m");
-            String name = scanner.nextLine();
-            System.out.print("\u001B[32mEnter your email: \u001B[0m");
-            String email = scanner.nextLine();
+
+            String name = "";
+            while (name.isEmpty()) {
+                System.out.print("\u001B[32mEnter your name: \u001B[0m");
+                name = scanner.nextLine();
+                if (name.isEmpty()) {
+                    System.out.println("-------------------------------------------------------------------------");
+                    System.out.println("\u001B[31mYou should write something!\u001B[0m");
+                    System.out.println("-------------------------------------------------------------------------");
+                }
+            }
+
+            String email = "";
+            while (email.isEmpty()) {
+                System.out.print("\u001B[32mEnter your email: \u001B[0m");
+                email = scanner.nextLine();
+                if (email.isEmpty()) {
+                    System.out.println("-------------------------------------------------------------------------");
+                    System.out.println("\u001B[31mYou should write something!\u001B[0m");
+                    System.out.println("-------------------------------------------------------------------------");
+                }
+            }
+
             System.out.println("-------------------------------------------------------------------------");
 
             User user = new User(name, email);
@@ -57,19 +76,40 @@ public class Main {
 
         } else if (choice.equalsIgnoreCase("Login")) {
             System.out.println("-------------------------------------------------------------------------");
-            System.out.print("\u001B[32mEnter your name: \u001B[0m");
-            String name = scanner.nextLine();
-            System.out.print("\u001B[32mEnter your email: \u001B[0m");
-            String email = scanner.nextLine();
+
+            String name = "";
+            while (name.isEmpty()) {
+                System.out.print("\u001B[32mEnter your name: \u001B[0m");
+                name = scanner.nextLine();
+                if (name.isEmpty()) {
+                    System.out.println("-------------------------------------------------------------------------");
+                    System.out.println("\u001B[31mYou should write something!\u001B[0m");
+                    System.out.println("-------------------------------------------------------------------------");
+                }
+            }
+
+            String email = "";
+            while (email.isEmpty()) {
+                System.out.print("\u001B[32mEnter your email: \u001B[0m");
+                email = scanner.nextLine();
+                if (email.isEmpty()) {
+                    System.out.println("-------------------------------------------------------------------------");
+                    System.out.println("\u001B[31mYou should write something!\u001B[0m");
+                    System.out.println("-------------------------------------------------------------------------");
+                }
+            }
+
             System.out.println("-------------------------------------------------------------------------");
 
             User user = new User(name, email);
             user.userLogin(name, email);
+
         } else {
             System.out.println("\u001B[31mInvalid input! Please answer 'registration' or 'login'.\u001B[0m");
-            handleRegistrationOrLogin();  // Retry if invalid input
+            handleRegistrationOrLogin();
         }
     }
+
 
     public static void fetchReviews(int userID) {
         Scanner scanner = new Scanner(System.in);

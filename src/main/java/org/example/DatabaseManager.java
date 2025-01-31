@@ -14,6 +14,7 @@ public class DatabaseManager implements AutoCloseable {
     private static final String SELECT_USER = "SELECT * FROM users WHERE username = ? AND email = ?";
     private static final String SELECT_REVIEWS = "SELECT u.userName, tr.feedback, tr.grade " + "FROM users u " + "JOIN theater_reviews tr ON u.user_id = tr.user_id " + "WHERE u.user_id = ?";
     private static final String SELECT_MOVIES = "SELECT title, genre, duration FROM movies";
+    private static final String SELECT_MOVIE_BY_ID = "SELECT title, genre, duration FROM movies WHERE movie_id = ?";
 
     private Connection connection;
 
@@ -92,6 +93,7 @@ public class DatabaseManager implements AutoCloseable {
                     String genre = rs.getString("genre");
                     String duration = rs.getString("duration");
 
+
                     moviesList.add(new Movies(title, genre, duration));
 
                 }
@@ -99,6 +101,24 @@ public class DatabaseManager implements AutoCloseable {
         }
         return moviesList;
     }
+
+
+    public Movies getMovieById(int movieId) throws SQLException {
+        try (PreparedStatement stmt = connection.prepareStatement(SELECT_MOVIE_BY_ID)) {
+            stmt.setInt(1, movieId);
+            try(ResultSet rs = stmt.executeQuery()){
+
+            if (rs.next()) {
+                return new Movies(
+                        rs.getString("title"),
+                        rs.getString("genre"),
+                        rs.getString("duration")
+                );
+            }
+        }
+        return null;
+    }
+}
 
 
         @Override

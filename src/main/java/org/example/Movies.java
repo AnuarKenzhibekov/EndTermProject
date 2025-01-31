@@ -2,8 +2,10 @@ package org.example;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Movies {
+    private int movieId;
     private String title;
     private String genre;
     private String duration;
@@ -30,8 +32,39 @@ public class Movies {
         }
     }
 
-    public static void askAboutMovie() {
+    public static void askMovie() {
+        try {
+            DatabaseManager dbManager = new DatabaseManager();
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("-------------------------------------------------------------------------");
+            System.out.println("\u001B[32mWhat movie do you want? (write number)↓\u001B[0m");
 
+            String askMovie = scanner.nextLine();
+
+            if (askMovie.matches("\\d+")) {
+                int movieId = Integer.parseInt(askMovie);
+                Movies movie = dbManager.getMovieById(movieId);
+
+                if (movie != null) {
+                    System.out.println("-------------------------------------------------------------------------");
+                    System.out.println("\u001B[32mYour movie: " + movie.getTitle() + "\u001B[0m");
+                } else {
+                    System.out.println("\u001B[33mMovie not found!\u001B[0m");
+                }
+            } else {
+                System.out.println("-------------------------------------------------------------------------");
+                System.out.println("\u001B[33mWrite Number!\u001B[0m");
+                Movies.askMovie();
+            }
+
+            scanner.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getMovieId() {
+        return movieId;
     }
 
 

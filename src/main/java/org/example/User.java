@@ -26,6 +26,7 @@ public class User {
             System.out.println("\u001B[32mUser successfully created: \u001B[0m\u001B[34m" + userName + "\u001B[0m\u001B[32m!\u001B[0m");
             System.out.println("-------------------------------------------------------------------------");
             Movies.displayAllMovies();
+            Movies.askMovie();
         } catch (SQLException e) {
             // Uniqueness error
             if ("23505".equals(e.getSQLState())) {
@@ -54,6 +55,7 @@ public class User {
                     System.out.println("\u001B[33mNo movies available.\u001B[0m");
                 } else {
                     Movies.displayAllMovies();
+                    Movies.askMovie();
                 }
             } else {
                 System.err.println("\u001B[31mInvalid username or email. Please try again.\u001B[0m");
