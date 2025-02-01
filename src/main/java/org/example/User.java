@@ -7,7 +7,7 @@ import java.util.List;
 
 public class User {
     // Create attributes
-    private int userID;
+    private static int userID;
     private String userName;
     private String email;
 
@@ -65,9 +65,100 @@ public class User {
         }
     }
 
+    public static void handleRegistrationOrLogin() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.print("\u001B[32mRegistration or Login: \u001B[0m");
+        String choice = scanner.nextLine();
+
+        if (choice.equalsIgnoreCase("Registration")) {
+            System.out.println("-------------------------------------------------------------------------");
+
+            String name = "";
+            while (name.isEmpty()) {
+                System.out.print("\u001B[32mEnter your name: \u001B[0m");
+                name = scanner.nextLine();
+                if (name.isEmpty()) {
+                    System.out.println("-------------------------------------------------------------------------");
+                    System.out.println("\u001B[31mYou should write something!\uD83D\uDE21 \u001B[0m");
+                    System.out.println("-------------------------------------------------------------------------");
+                }
+            }
+
+            String email = "";
+            while (email.isEmpty()) {
+                System.out.print("\u001B[32mEnter your email: \u001B[0m");
+                email = scanner.nextLine();
+                if (email.isEmpty()) {
+                    System.out.println("-------------------------------------------------------------------------");
+                    System.out.println("\u001B[31mYou should write something!\uD83D\uDE21\u001B[0m");
+                    System.out.println("-------------------------------------------------------------------------");
+                }
+            }
+
+            System.out.println("-------------------------------------------------------------------------");
+
+            User user = new User(name, email);
+            user.userRegistration(name, email);
+
+        } else if (choice.equalsIgnoreCase("Login")) {
+            System.out.println("-------------------------------------------------------------------------");
+
+            String name = "";
+            while (name.isEmpty()) {
+                System.out.print("\u001B[32mEnter your name: \u001B[0m");
+                name = scanner.nextLine();
+                if (name.isEmpty()) {
+                    System.out.println("-------------------------------------------------------------------------");
+                    System.out.println("\u001B[31mYou should write something!\uD83D\uDE21\u001B[0m");
+                    System.out.println("-------------------------------------------------------------------------");
+                }
+            }
+
+            String email = "";
+            while (email.isEmpty()) {
+                System.out.print("\u001B[32mEnter your email: \u001B[0m");
+                email = scanner.nextLine();
+                if (email.isEmpty()) {
+                    System.out.println("-------------------------------------------------------------------------");
+                    System.out.println("\u001B[31mYou should write something!\uD83D\uDE21\u001B[0m");
+                    System.out.println("-------------------------------------------------------------------------");
+                }
+            }
+
+            System.out.println("-------------------------------------------------------------------------");
+
+            User user = new User(name, email);
+            user.userLogin(name, email);
+
+        } else {
+            System.out.println("\u001B[31mInvalid input! Please answer 'registration' or 'login' \uD83D\uDE21\u001B[0m");
+            handleRegistrationOrLogin();
+        }
+    }
+
+    public static void handleUserFlow() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("\u001B[32mDo you want to read reviews about our cinema? (yes or no)↓\u001B[0m");
+        String readReviews = scanner.nextLine();
+
+        if (readReviews.equalsIgnoreCase("Yes")) {
+            Reviews.fetchReviews();
+        } else if (readReviews.equalsIgnoreCase("No")) {
+            handleRegistrationOrLogin();
+        } else {
+            System.out.println("-------------------------------------------------------------------------");
+            System.out.println("\u001B[31mInvalid input! Please answer 'yes' or 'no' \uD83D\uDE21 \u001B[0m");
+            System.out.println("-------------------------------------------------------------------------");
+            handleUserFlow();  // Retry if invalid input
+        }
+    }
+
 
     // Getters and setters for user
-    public int getUserID() {return userID;}
+    public static int getUserID() {return userID;}
     public void setUserID(int userID) {this.userID = userID;}
     public String getUserName() { return userName; }
     public void setUserName(String firstName) {this.userName = userName; }
