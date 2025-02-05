@@ -1,4 +1,5 @@
-package org.example;
+package MainPackage;
+import Repositories.ReviewRepository;
 
 import java.util.Scanner;
 
@@ -20,7 +21,8 @@ public class Reviews {
 
         while (true) {
             try (DatabaseManager dbManager = new DatabaseManager()) {
-                Reviews review = dbManager.getReviewByUserId(userId);
+                ReviewRepository reviewrep = new ReviewRepository(dbManager.getConnection());
+                Reviews review = reviewrep.getReviewByUserId(userId);
 
                 if (review != null) {  // If review exists
                     System.out.println("-------------------------------------------");

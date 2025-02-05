@@ -1,6 +1,4 @@
-package org.example;
-
-import java.util.Scanner;
+package MainPackage;
 
 public class Main {
     public static void main(String[] args) {
