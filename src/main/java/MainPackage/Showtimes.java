@@ -1,6 +1,6 @@
 package MainPackage;
 import Repositories.ShowtimeRepository;
-
+import java.util.Scanner;
 import java.util.List;
 
 public class Showtimes {
@@ -14,6 +14,36 @@ public class Showtimes {
         this.date = date;
         this.showtime = showtime;
     }
+
+    public static void askDate(){
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("\u001B[32mPlease enter the date:\u001B[0m");
+        Scanner scanner = new Scanner(System.in);
+        String inputDate = scanner.nextLine();
+        if (inputDate.isEmpty()) {
+            System.out.println("-------------------------------------------------------------------------");
+            System.out.println("\u001B[31mPlease enter the date!\u001B[0m");
+            askDate();
+        }
+        else {
+            askTime();
+        }
+    }
+
+    public static void askTime(){
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("\u001B[32mPlease enter the time:\u001B[0m");
+        Scanner scanner = new Scanner(System.in);
+        String inputTime = scanner.nextLine();
+        if (inputTime.isEmpty()){
+            System.out.println("\u001B[31mWrite Time!\u001B[0m");
+            askTime();
+        }
+        else {
+            Seats.displayAvailableSeats();
+        }
+    }
+
 
     public static void displayShowtimes(int movieId) {
         try {
@@ -31,6 +61,7 @@ public class Showtimes {
                 for (Showtimes showtime : showtimeList) {
                     System.out.println(showtime);
                 }
+                askDate();
             }
         } catch (Exception e) {
             e.printStackTrace();
