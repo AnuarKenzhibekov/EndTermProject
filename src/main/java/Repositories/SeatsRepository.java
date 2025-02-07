@@ -8,51 +8,74 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeatsRepository {
+public class SeatsRepository implements SeatsRepositoryInterface {
     private final Connection connection;
 
     public SeatsRepository(Connection connection) {
         this.connection = connection;
     }
 
-    public List<Seats> getAllAvailableSeats() throws SQLException {
-        String sql = "SELECT * FROM seats WHERE status = 'available'";
+    private Seats createSeat(ResultSet rs) throws SQLException {
+        return new Seats(
+                rs.getInt("seat_id"),
+                rs.getInt("showtime_id"),
+                rs.getInt("hall_id"),
+                rs.getInt("number"),
+                rs.getString("row"),
+                rs.getString("status"),
+                rs.getInt("movie_id")
+        );
+    }
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+    public List<Seats> getAllAvailableSeats(int showtimeId) throws SQLException {
+        String sql = "SELECT * FROM seats WHERE showtime_id = ? AND status = 'available'";
 
-            List<Seats> availableSeats = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, showtimeId);
 
-            while (rs.next()) {
-                availableSeats.add(new Seats(
-                        rs.getInt("seat_id"),
-                        rs.getInt("showtime_id"),
-                        rs.getInt("hall_id"),
-                        rs.getInt("number"),
-                        rs.getString("row"),
-                        rs.getString("status"),
-                        rs.getInt("movie_id")
-                ));
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Seats> availableSeats = new ArrayList<>();
+
+                while (rs.next()) {
+                    availableSeats.add(createSeat(rs));
+                }
+                return availableSeats;
             }
-            return availableSeats;
         }
     }
 
 
+    public Seats getSeatByRowAndNumber(int showtimeId, String row, int number) throws SQLException {
+        String sql = "SELECT s.* FROM seats s " +
+                "JOIN hall h ON s.hall_id = h.hall_id " +
+                "WHERE s.showtime_id = ? AND s.row = ? AND s.number = ? AND h.status != 'not available'";
 
-    public void bookSeat(int seatId) throws SQLException {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, showtimeId);
+            stmt.setString(2, row);
+            stmt.setInt(3, number);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return createSeat(rs);
+                }
+            }
+        }
+        System.out.println("\u001B[31mSorry! but the hall is not available.\u001B[0m");
+        return null;
+    }
+
+    @Override
+    public boolean bookSeat(int seatId) throws SQLException {
         String sql = "UPDATE seats SET status = 'booked' WHERE seat_id = ? AND status = 'available'";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, seatId);
-            int rowsUpdated = stmt.executeUpdate();
-
-            if (rowsUpdated > 0) {
-                System.out.println("Seat " + seatId + " has been successfully booked.");
-            } else {
-                System.out.println("The seat is either already booked or doesn't exist.");
-            }
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
         }
     }
 }
+
+
 

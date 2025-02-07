@@ -15,34 +15,30 @@ public class Showtimes {
         this.showtime = showtime;
     }
 
-    public static void askDate(){
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.println("\u001B[32mPlease enter the date:\u001B[0m");
+    public static void askShowtime() {
         Scanner scanner = new Scanner(System.in);
-        String inputDate = scanner.nextLine();
-        if (inputDate.isEmpty()) {
+        while (true) {
             System.out.println("-------------------------------------------------------------------------");
-            System.out.println("\u001B[31mPlease enter the date!\u001B[0m");
-            askDate();
-        }
-        else {
-            askTime();
+            System.out.println("\u001B[32mChoose your showtime (write number) ↓\u001B[0m");
+            String inputShowtime = scanner.nextLine();
+
+            if (inputShowtime.isEmpty()) {
+                System.out.println("-------------------------------------------------------------------------");
+                System.out.println("\u001B[31mWrite number!\u001B[0m");
+                continue;
+            }
+
+            try {
+                int showtimeId = Integer.parseInt(inputShowtime);
+                Seats.displayAvailableSeats(showtimeId);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("-------------------------------------------------------------------------");
+                System.out.println("\u001B[31mInvalid input! Please enter a valid number.\u001B[0m");
+            }
         }
     }
 
-    public static void askTime(){
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.println("\u001B[32mPlease enter the time:\u001B[0m");
-        Scanner scanner = new Scanner(System.in);
-        String inputTime = scanner.nextLine();
-        if (inputTime.isEmpty()){
-            System.out.println("\u001B[31mWrite Time!\u001B[0m");
-            askTime();
-        }
-        else {
-            Seats.displayAvailableSeats();
-        }
-    }
 
 
     public static void displayShowtimes(int movieId) {
@@ -61,7 +57,7 @@ public class Showtimes {
                 for (Showtimes showtime : showtimeList) {
                     System.out.println(showtime);
                 }
-                askDate();
+                askShowtime();
             }
         } catch (Exception e) {
             e.printStackTrace();

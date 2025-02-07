@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserRepository {
+public class UserRepository implements UserRepositoryInterface {
     private final Connection connection;
 
     public UserRepository(Connection connection) {

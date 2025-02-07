@@ -14,7 +14,4 @@ public class Main {
             main(args);  // Restart the main method for correct input
         }
     }
-
-
-
 }
