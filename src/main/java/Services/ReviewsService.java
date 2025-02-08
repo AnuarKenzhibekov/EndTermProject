@@ -1,21 +1,12 @@
-package MainPackage;
-import Repositories.ReviewRepository;
+package Services;
 
+import Entity.Reviews;
+import Repositories.ReviewRepository;
+import DataBase.DatabaseManager;
 import java.util.Scanner;
 
-public class Reviews {
-    private String userName;
-    private String feedback;
-    private int grade;
-
-    public Reviews(String userName, String feedback, int grade) {
-        this.userName = userName;
-        this.feedback = feedback;
-        this.grade = grade;
-    }
-
-
-    public static void fetchReviews() {
+public class ReviewsService implements ReviewActions{
+    public void fetchReviews() {
         Scanner scanner = new Scanner(System.in);
         int userId = 1;
 
@@ -55,17 +46,6 @@ public class Reviews {
             }
         }
 
-        User.handleUserFlow();  // After finishing review fetch, return to user flow
-    }
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getFeedback() {
-        return feedback;
-    }
-
-    public int getGrade() {
-        return grade;
+        UserService.handleUserFlow();  // After finishing review fetch, return to user flow
     }
 }

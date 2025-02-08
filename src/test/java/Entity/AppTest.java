@@ -1,4 +1,4 @@
-package MainPackage;
+package Entity;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

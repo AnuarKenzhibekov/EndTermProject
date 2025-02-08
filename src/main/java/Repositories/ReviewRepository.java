@@ -1,6 +1,6 @@
 package Repositories;
 
-import MainPackage.Reviews;
+import Entity.Reviews;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

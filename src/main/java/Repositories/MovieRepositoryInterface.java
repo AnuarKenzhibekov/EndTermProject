@@ -1,6 +1,6 @@
 package Repositories;
 
-import MainPackage.Movies;
+import Entity.Movies;
 import java.sql.SQLException;
 import java.util.List;
 

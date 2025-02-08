@@ -1,21 +1,14 @@
-package MainPackage;
+package Services;
+
+import Entity.Showtimes;
+
 import Repositories.ShowtimeRepository;
-import java.util.Scanner;
+import DataBase.DatabaseManager;
 import java.util.List;
+import java.util.Scanner;
 
-public class Showtimes {
-    private int showtime_id;
-    private String date;
-    private String showtime;
-    private int hallId;
-
-    public Showtimes(String date, String showtime, int hallId) {
-        this.hallId = hallId;
-        this.date = date;
-        this.showtime = showtime;
-    }
-
-    public static void askShowtime() {
+public class ShowtimesService implements ShowtimesActions {
+    public void askShowtime() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("-------------------------------------------------------------------------");
@@ -30,7 +23,8 @@ public class Showtimes {
 
             try {
                 int showtimeId = Integer.parseInt(inputShowtime);
-                Seats.displayAvailableSeats(showtimeId);
+                SeatsService seatsService = new SeatsService();
+                seatsService.displayAvailableSeats(showtimeId);
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("-------------------------------------------------------------------------");
@@ -41,7 +35,7 @@ public class Showtimes {
 
 
 
-    public static void displayShowtimes(int movieId) {
+    public void displayShowtimes(int movieId) {
         try {
             DatabaseManager dbManager = new DatabaseManager();
             ShowtimeRepository showtimerep = new ShowtimeRepository(dbManager.getConnection());
@@ -51,7 +45,8 @@ public class Showtimes {
 
             if (showtimeList.isEmpty()) {
                 System.out.println("\u001B[31mNo showtimes found for the movie. Please try later!\u001B[0m");
-                Movies.ConsoleMovieQueryStrategy queryStrategy = new Movies("Title", "Genre", "Duration").new ConsoleMovieQueryStrategy();
+                MoviesService moviesService = new MoviesService();
+                MoviesService.ConsoleMovieQueryStrategy queryStrategy = moviesService.new ConsoleMovieQueryStrategy();
                 queryStrategy.askMovie();
             } else {
                 for (Showtimes showtime : showtimeList) {
@@ -62,34 +57,5 @@ public class Showtimes {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public String toString() {
-        String greenColor = "\u001B[32m";
-        String resetColor = "\u001B[0m";
-        return greenColor + "Date: " + date + " | Showtime: " + showtime + " | Hall: " + hallId + resetColor;
-    }
-
-    public int getShowtime_id() {
-        return showtime_id;
-    }
-    public void setShowtime_id(int showtime_id) {
-        this.showtime_id = showtime_id;
-    }
-
-    public String getDate() {
-        return date;
-    }
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getShowtime() {
-        return showtime;
-    }
-
-    public void setShowtime(String showtime) {
-        this.showtime = showtime;
     }
 }

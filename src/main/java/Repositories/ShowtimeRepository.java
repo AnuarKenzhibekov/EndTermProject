@@ -1,6 +1,6 @@
 package Repositories;
 
-import MainPackage.Showtimes;
+import Entity.Showtimes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,4 +30,23 @@ public class ShowtimeRepository implements ShowtimeRepositoryInterface{
         }
         return showtimesList;
     }
+
+    public Showtimes getShowtimeById(int showtimeId) throws SQLException {
+        String sql = "SELECT * FROM showtimes WHERE showtime_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, showtimeId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String date = rs.getString("date");
+                    String showtime = rs.getString("showtime");
+                    int hallId = rs.getInt("hall_id");
+                    return new Showtimes(date, showtime, hallId);
+                } else {
+                    throw new SQLException("Showtime not found");
+                }
+            }
+        }
+    }
 }
+
+

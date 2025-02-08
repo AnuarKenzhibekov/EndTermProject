@@ -1,4 +1,5 @@
-package MainPackage;
+import Entity.Beginning;
+import Services.UserService;
 
 public class Main {
     public static void main(String[] args) {
@@ -6,7 +7,7 @@ public class Main {
         String start = beg.beginning();
 
         if (start.equalsIgnoreCase("Yes")) {
-            User.handleUserFlow();
+            UserService.handleUserFlow();
         } else if (start.equalsIgnoreCase("No")) {
             System.out.println("\u001B[32mOkay! Bye \uD83D\uDE22 \u001B[0m");
         } else {

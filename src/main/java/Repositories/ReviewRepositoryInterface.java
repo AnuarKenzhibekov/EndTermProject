@@ -1,6 +1,6 @@
 package Repositories;
 
-import MainPackage.Reviews;
+import Entity.Reviews;
 import java.sql.SQLException;
 
 public interface ReviewRepositoryInterface {

@@ -1,6 +1,6 @@
 package Repositories;
 
-import MainPackage.Seats;
+import Entity.Seats;
 import java.sql.SQLException;
 import java.util.List;
 

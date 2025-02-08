@@ -1,6 +1,6 @@
 package Repositories;
 
-import MainPackage.Seats;
+import Entity.Seats;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,6 +44,31 @@ public class SeatsRepository implements SeatsRepositoryInterface {
         }
     }
 
+    public Seats getSeatById(int seatId) throws SQLException {
+        String sql = "SELECT * FROM seats WHERE seat_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, seatId);  // Подставляем seatId в запрос
+
+            // Выполняем запрос и обрабатываем результат
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int showtimeId = rs.getInt("showtime_id");
+                    int hallId = rs.getInt("hall_id");
+                    int number = rs.getInt("number");
+                    String row = rs.getString("row");
+                    String status = rs.getString("status");
+                    int movieId = rs.getInt("movie_id");
+
+
+                    return new Seats(seatId, showtimeId, hallId, number, row, status, movieId);
+                } else {
+
+                    throw new SQLException("Seat not found with ID: " + seatId);
+                }
+            }
+        }
+    }
 
     public Seats getSeatByRowAndNumber(int showtimeId, String row, int number) throws SQLException {
         String sql = "SELECT s.* FROM seats s " +

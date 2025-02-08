@@ -1,6 +1,6 @@
 package Repositories;
 
-import MainPackage.User;
+import Entity.User;
 import java.sql.SQLException;
 
 public interface UserRepositoryInterface {

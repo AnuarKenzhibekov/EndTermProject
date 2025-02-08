@@ -1,12 +1,15 @@
-package MainPackage;
+package Entity;
 
 public class Bookings {
-    private int bookingId;
+    private static int bookingId;
     private int userId;
     private int showtimeId;
     private int seatId;
     private int hallId;
     private String status;
+
+    private Movies movie;
+    private Seats seat;
 
     public Bookings(int bookingId, int userId, int showtimeId, int seatId, int hallId, String status) {
         this.bookingId = bookingId;
@@ -17,9 +20,10 @@ public class Bookings {
         this.status = status;
     }
 
-    public int getBookingId() {
+    public static int getBookingId() {
         return bookingId;
     }
+
 
     public void setBookingId(int bookingId) {
         this.bookingId = bookingId;

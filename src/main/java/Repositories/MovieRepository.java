@@ -1,6 +1,6 @@
 package Repositories;
 
-import MainPackage.Movies;
+import Entity.Movies;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +15,27 @@ public class MovieRepository implements MovieRepositoryInterface {
         this.connection = connection;
     }
 
+    public Movies getMovieById(int movieId) throws SQLException {
+        String sql = "SELECT * FROM movies WHERE movie_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, movieId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String title = rs.getString("title");
+                    String genre = rs.getString("genre");
+                    String duration = rs.getString("duration");
+
+                    // Возвращаем объект Movies
+                    return new Movies(title, genre, duration);
+                } else {
+                    throw new SQLException("Movie not found for ID: " + movieId);
+                }
+            }
+        }
+    }
+
     public List<Movies> getAllMovies() throws SQLException {
         List<Movies> moviesList = new ArrayList<>();
         String sql = "SELECT title, genre, duration FROM movies";
@@ -27,19 +48,6 @@ public class MovieRepository implements MovieRepositoryInterface {
             }
         }
         return moviesList;
-    }
-
-    public Movies getMovieById(int movieId) throws SQLException {
-        String sql = "SELECT title, genre, duration FROM movies WHERE movie_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, movieId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new Movies(rs.getString("title"), rs.getString("genre"), rs.getString("duration"));
-                }
-            }
-        }
-        return null;
     }
 }
 

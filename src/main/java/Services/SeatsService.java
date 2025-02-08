@@ -1,28 +1,14 @@
-package MainPackage;
-import Repositories.SeatsRepository;
+package Services;
 
+import Entity.*;
+import Repositories.BookingsRepository;
+import Repositories.SeatsRepository;
+import DataBase.DatabaseManager;
+import Repositories.UserRepository;
 import java.util.*;
 
-public class Seats {
-    private int seatId;
-    private int showtimeId;
-    private int hallId;
-    private int number;
-    private String row;
-    private String status;
-    private int movieId;
-
-    public Seats(int seatId, int showtimeId, int hallId, int number, String row, String status, int movieId) {
-        this.seatId = seatId;
-        this.showtimeId = showtimeId;
-        this.hallId = hallId;
-        this.number = number;
-        this.row = row;
-        this.status = status;
-        this.movieId = movieId;
-    }
-
-    public static void displayAvailableSeats(int showtimeId) {
+public class SeatsService implements SeatsActions {
+    public void displayAvailableSeats(int showtimeId) {
         try {
             DatabaseManager dbManager = new DatabaseManager();
             SeatsRepository seatsrep = new SeatsRepository(dbManager.getConnection());
@@ -32,7 +18,8 @@ public class Seats {
             if (availableSeats.isEmpty()) {
                 System.out.println("-------------------------------------------------------------------------");
                 System.out.println("\u001B[31mNo available seats found.\u001B[0m");
-                Showtimes.askShowtime();
+                ShowtimesService showtimesService = new ShowtimesService();
+                showtimesService.askShowtime();
             } else {
                 System.out.println("-------------------------------------------------------------------------");
                 System.out.println("\u001B[32mAvailable Seats:\u001B[0m");
@@ -70,9 +57,9 @@ public class Seats {
                     System.out.println("-------------------------------------------------------------------------");
                     System.out.println("\u001B[31mBooking canceled.\u001B[0m");
                     System.out.println("-------------------------------------------------------------------------");
-                    Movies.ConsoleMovieQueryStrategy queryStrategy = new Movies("Title", "Genre", "Duration").new ConsoleMovieQueryStrategy();
-                    Movies movies = new Movies("Title", "Genre", "Duration");
-                    movies.displayMovieDetails();
+                    MoviesService moviesService = new MoviesService();
+                    moviesService.displayMovieDetails();
+                    MoviesService.ConsoleMovieQueryStrategy queryStrategy = moviesService.new ConsoleMovieQueryStrategy();
                     queryStrategy.askMovie();
                 } else {
                     System.out.println("-------------------------------------------------------------------------");
@@ -85,12 +72,12 @@ public class Seats {
         }
     }
 
-
-    public static void askAndBookSeat(int showtimeId) {
+    public void askAndBookSeat(int showtimeId) {
         try {
             Scanner scanner = new Scanner(System.in);
             DatabaseManager dbManager = new DatabaseManager();
             SeatsRepository seatsrep = new SeatsRepository(dbManager.getConnection());
+            BookingsRepository bookingsRepository = new BookingsRepository(dbManager.getConnection());
 
             System.out.println("\u001B[32mChoose a row (a,b):\u001B[0m");
             String row = scanner.nextLine().trim();
@@ -103,9 +90,20 @@ public class Seats {
 
             if (seat != null && "available".equals(seat.getStatus())) {
                 boolean isBooked = seatsrep.bookSeat(seat.getSeatId());
+
                 if (isBooked) {
                     System.out.println("-------------------------------------------------------------------------");
                     System.out.println("\u001B[32mSeat booked successfully!\u001B[0m");
+
+                    Bookings booking = new Bookings(Bookings.getBookingId(), User.getUserID(), showtimeId, seat.getSeatId(), seat.getHallId(), "booked");
+                    boolean bookingSuccess = bookingsRepository.createBooking(booking);
+
+                    if (bookingSuccess) {
+                        System.out.println("\u001B[32mBooking successful! Here is your ticket:\u001B[0m");
+                    } else {
+                        System.out.println("\u001B[31mFailed to create booking.\u001B[0m");
+                    }
+
                 } else {
                     System.out.println("\u001B[31mFailed to book the seat. Please try again later.\u001B[0m");
                 }
@@ -117,54 +115,4 @@ public class Seats {
         }
     }
 
-
-
-
-    public int getSeatId() {
-        return seatId;
-    }
-
-    public void setSeatId(int seatId) {
-        this.seatId = seatId;
-    }
-
-    public int getShowtimeId() {
-        return showtimeId;
-    }
-
-    public void setShowtimeId(int showtimeId) {
-        this.showtimeId = showtimeId;
-    }
-
-    public int getHallId() {
-        return hallId;
-    }
-
-    public void setHallId(int hallId) {
-        this.hallId = hallId;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public String getRow() {
-        return row;
-    }
-
-    public void setRow(String row) {
-        this.row = row;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }
-

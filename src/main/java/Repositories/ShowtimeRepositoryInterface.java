@@ -1,7 +1,6 @@
 package Repositories;
 
-import MainPackage.Reviews;
-import MainPackage.Showtimes;
+import Entity.Showtimes;
 
 import java.sql.SQLException;
 import java.util.List;

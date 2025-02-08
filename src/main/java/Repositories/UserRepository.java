@@ -1,6 +1,6 @@
 package Repositories;
 
-import MainPackage.User;
+import Entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,7 +38,10 @@ public class UserRepository implements UserRepositoryInterface {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
+                    User user = new User(rs.getString("username"), rs.getString("email"));
+                    user.setUserID(rs.getInt("user_id"));
                     return new User(rs.getString("username"), rs.getString("email"));
+
                 }
             }
         }
