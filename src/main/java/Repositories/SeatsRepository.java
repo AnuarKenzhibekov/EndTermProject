@@ -48,7 +48,7 @@ public class SeatsRepository implements SeatsRepositoryInterface {
         String sql = "SELECT * FROM seats WHERE seat_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, seatId);  // Подставляем seatId в запрос
+            stmt.setInt(1, seatId);
 
             // Выполняем запрос и обрабатываем результат
             try (ResultSet rs = stmt.executeQuery()) {

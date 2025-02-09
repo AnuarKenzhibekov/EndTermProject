@@ -1,7 +1,7 @@
 package Entity;
 
 public class Movies {
-    private int movieId;
+    private static int movieId;
     private static String title;
     private String genre;
     private String duration;
@@ -13,7 +13,7 @@ public class Movies {
     }
 
 
-    public  int getMovieId() {
+    public static int getMovieId() {
         return movieId;
     }
 

@@ -2,8 +2,8 @@ package Entity;
 
 public class Showtimes {
     private int showtime_id;
-    private static String date;
-    private static String showtime;
+    private String date;
+    private String showtime;
     private int hallId;
 
     public Showtimes(String date, String showtime, int hallId) {
@@ -27,14 +27,14 @@ public class Showtimes {
         this.showtime_id = showtime_id;
     }
 
-    public static String getDate() {
+    public String getDate() {
         return date;
     }
     public void setDate(String date) {
         this.date = date;
     }
 
-    public static String getShowtime() {
+    public String getShowtime() {
         return showtime;
     }
 

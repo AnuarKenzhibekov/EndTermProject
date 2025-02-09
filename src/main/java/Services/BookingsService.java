@@ -2,17 +2,18 @@ package Services;
 
 import Entity.*;
 import Repositories.BookingsRepository;
+import Repositories.MovieRepository;
 import Repositories.UserRepository;
+import Repositories.ShowtimeRepository;
 import DataBase.DatabaseManager;
-import Repositories.SeatsRepository;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-public class BookingsService {
+public class BookingsService implements BookingsActions{
 
     private final DatabaseManager dbManager;
-    private final BookingsRepository bookingRepository;
+    private static BookingsRepository bookingRepository;
     private final UserRepository userRepository;
 
     public BookingsService(DatabaseManager dbManager) {
@@ -91,3 +92,4 @@ public class BookingsService {
         }
     }
 }
+

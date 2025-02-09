@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookingsRepository {
+public class BookingsRepository implements BookingsRepositoryInterface {
     private final Connection connection;
 
     public BookingsRepository(Connection connection) {
