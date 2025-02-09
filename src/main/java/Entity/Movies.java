@@ -1,8 +1,8 @@
 package Entity;
 
 public class Movies {
-    private static int movieId;
-    private static String title;
+    private int movieId;
+    private String title;
     private String genre;
     private String duration;
 
@@ -13,7 +13,7 @@ public class Movies {
     }
 
 
-    public static int getMovieId() {
+    public int getMovieId() {
         return movieId;
     }
 
@@ -21,7 +21,7 @@ public class Movies {
         this.movieId = movieId;
     }
 
-    public static String getTitle() {
+    public String getTitle() {
         return title;
     }
 
