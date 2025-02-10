@@ -27,6 +27,12 @@ public class Showtimes {
         this.showtime_id = showtime_id;
     }
 
+    public int getHallId() {
+        return hallId;
+    }
+    public void setHallId(int hallId) {
+        this.hallId = hallId;
+    }
     public String getDate() {
         return date;
     }

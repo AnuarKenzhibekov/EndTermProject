@@ -38,7 +38,7 @@ public class ShowtimeRepository implements ShowtimeRepositoryInterface{
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     String date = rs.getString("date");
-                    String showtime = rs.getString("showtime");
+                    String showtime = rs.getString("showtimes");
                     int hallId = rs.getInt("hall_id");
                     return new Showtimes(date, showtime, hallId);
                 } else {

@@ -1,11 +1,18 @@
 package Services;
 
-import Entity.*;
-import Repositories.BookingsRepository;
-import Repositories.SeatsRepository;
 import DataBase.DatabaseManager;
-import Repositories.UserRepository;
-import java.util.*;
+import Entity.Bookings;
+import Entity.Seats;
+import Entity.User;
+import Repositories.BookingsRepository;
+import Repositories.MovieRepository;
+import Repositories.SeatsRepository;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 
 public class SeatsService implements SeatsActions {
     public void displayAvailableSeats(int showtimeId) {
@@ -72,47 +79,70 @@ public class SeatsService implements SeatsActions {
         }
     }
 
-    public void askAndBookSeat(int showtimeId) {
-        try {
-            Scanner scanner = new Scanner(System.in);
-            DatabaseManager dbManager = new DatabaseManager();
-            SeatsRepository seatsrep = new SeatsRepository(dbManager.getConnection());
-            BookingsRepository bookingsRepository = new BookingsRepository(dbManager.getConnection());
+    public void askAndBookSeat(int showtimeId) throws SQLException {
+        Scanner scanner = new Scanner(System.in);
+        DatabaseManager dbManager = new DatabaseManager();
+        SeatsRepository seatsrep = new SeatsRepository(dbManager.getConnection());
+        BookingsRepository bookingsRepository = new BookingsRepository(dbManager.getConnection());
+        MovieRepository moviesrep = new MovieRepository(dbManager.getConnection());
 
+        String row;
+        int number;
+
+        while (true) {
             System.out.println("\u001B[32mChoose a row (a,b):\u001B[0m");
-            String row = scanner.nextLine().trim();
+            row = scanner.nextLine().trim();
+            if (!row.isEmpty()) break;
+            System.out.println("-------------------------------------------------------------------------");
+            System.out.println("\u001B[31mInvalid input. Row cannot be empty.\u001B[0m");
+            System.out.println("-------------------------------------------------------------------------");
+        }
 
+        while (true) {
             System.out.println("-------------------------------------------------------------------------");
             System.out.println("\u001B[32mChoose a seat number:\u001B[0m");
-            int number = Integer.parseInt(scanner.nextLine().trim());
+            String input = scanner.nextLine().trim();
 
-            Seats seat = seatsrep.getSeatByRowAndNumber(showtimeId, row, number);
-
-            if (seat != null && "available".equals(seat.getStatus())) {
-                boolean isBooked = seatsrep.bookSeat(seat.getSeatId());
-
-                if (isBooked) {
+            if (!input.isEmpty()) {
+                try {
+                    number = Integer.parseInt(input);
+                    break;
+                } catch (NumberFormatException e) {
                     System.out.println("-------------------------------------------------------------------------");
-                    System.out.println("\u001B[32mSeat booked successfully!\u001B[0m");
-
-                    Bookings booking = new Bookings(Bookings.getBookingId(), User.getUserID(), showtimeId, seat.getSeatId(), seat.getHallId(), "booked");
-                    boolean bookingSuccess = bookingsRepository.createBooking(booking);
-
-                    if (bookingSuccess) {
-                        System.out.println("\u001B[32mBooking successful! Here is your ticket:\u001B[0m");
-                    } else {
-                        System.out.println("\u001B[31mFailed to create booking.\u001B[0m");
-                    }
-
-                } else {
-                    System.out.println("\u001B[31mFailed to book the seat. Please try again later.\u001B[0m");
+                    System.out.println("\u001B[31mInvalid input. Please enter a valid seat number.\u001B[0m");
+                    System.out.println("-------------------------------------------------------------------------");
                 }
             } else {
-                System.out.println("\u001B[31mThis seat is not available or does not exist.\u001B[0m");
+                System.out.println("-------------------------------------------------------------------------");
+                System.out.println("\u001B[31mInvalid input. Seat number cannot be empty.\u001B[0m");
+                System.out.println("-------------------------------------------------------------------------");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+
+        Seats seat = seatsrep.getSeatByRowAndNumber(showtimeId, row, number);
+
+        if (seat != null && "available".equals(seat.getStatus())) {
+            boolean isBooked = seatsrep.bookSeat(seat.getSeatId());
+
+            if (isBooked) {
+                System.out.println("-------------------------------------------------------------------------");
+                System.out.println("\u001B[32mSeat booked successfully!\u001B[0m");
+
+                Bookings booking = new Bookings(Bookings.getBookingId(), User.getUserID(), showtimeId, seat.getSeatId(), seat.getHallId(), "booked");
+                boolean bookingSuccess = bookingsRepository.createBooking(booking);
+
+                if (bookingSuccess) {
+                    System.out.println("\u001B[32mBooking successful! Here is your ticket:\u001B[0m");
+                    TicketService ticketService = new TicketService(new DatabaseManager());
+                    ticketService.printTicket(showtimeId);
+                } else {
+                    System.out.println("\u001B[31mFailed to create booking.\u001B[0m");
+                }
+            } else {
+                System.out.println("\u001B[31mFailed to book the seat. Please try again later.\u001B[0m");
+            }
+        } else {
+            System.out.println("\u001B[31mThis seat is not available or does not exist.\u001B[0m");
         }
     }
-
 }
