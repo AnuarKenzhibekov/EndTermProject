@@ -1,0 +1,601 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.2
+-- Dumped by pg_dump version 17.2
+
+-- Started on 2025-02-10 19:40:08
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 229 (class 1259 OID 33068)
+-- Name: bookings_booking_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.bookings_booking_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.bookings_booking_id_seq OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 224 (class 1259 OID 24921)
+-- Name: bookings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.bookings (
+    booking_id integer DEFAULT nextval('public.bookings_booking_id_seq'::regclass) NOT NULL,
+    user_id integer,
+    showtime_id integer,
+    seat_id integer,
+    hall_id integer,
+    status character varying(20)
+);
+
+
+ALTER TABLE public.bookings OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1259 OID 24886)
+-- Name: hall; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hall (
+    hall_id integer NOT NULL,
+    status character varying(50)
+);
+
+
+ALTER TABLE public.hall OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 24869)
+-- Name: movies; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.movies (
+    movie_id integer NOT NULL,
+    title character varying(100) NOT NULL,
+    duration text NOT NULL,
+    genre character varying(50),
+    rating double precision,
+    status character varying(50)
+);
+
+
+ALTER TABLE public.movies OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 33066)
+-- Name: seats_seat_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seats_seat_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.seats_seat_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1259 OID 24906)
+-- Name: seats; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.seats (
+    seat_id integer DEFAULT nextval('public.seats_seat_id_seq'::regclass) NOT NULL,
+    showtime_id integer,
+    hall_id integer,
+    number integer NOT NULL,
+    "row" character varying(5),
+    status character varying(20),
+    movie_id integer
+);
+
+
+ALTER TABLE public.seats OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 24891)
+-- Name: showtimes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.showtimes (
+    showtime_id integer NOT NULL,
+    movie_id integer,
+    hall_id integer,
+    showtimes text,
+    date text
+);
+
+
+ALTER TABLE public.showtimes OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 33052)
+-- Name: showtime_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.showtime_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.showtime_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4973 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: showtime_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.showtime_id_seq OWNED BY public.showtimes.showtime_id;
+
+
+--
+-- TOC entry 226 (class 1259 OID 33016)
+-- Name: theater_reviews_review_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.theater_reviews_review_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.theater_reviews_review_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 24874)
+-- Name: theater_reviews; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.theater_reviews (
+    review_id integer DEFAULT nextval('public.theater_reviews_review_id_seq'::regclass) NOT NULL,
+    user_id integer,
+    grade text,
+    feedback text,
+    status character varying(50)
+);
+
+
+ALTER TABLE public.theater_reviews OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 24854)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    user_id integer NOT NULL,
+    username character varying(50) NOT NULL,
+    email character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 24859)
+-- Name: users_roles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users_roles (
+    user_id integer NOT NULL,
+    client character varying(20),
+    admin character varying(20)
+);
+
+
+ALTER TABLE public.users_roles OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 24966)
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.users ALTER COLUMN user_id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.users_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 4775 (class 2604 OID 33053)
+-- Name: showtimes showtime_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.showtimes ALTER COLUMN showtime_id SET DEFAULT nextval('public.showtime_id_seq'::regclass);
+
+
+--
+-- TOC entry 4962 (class 0 OID 24921)
+-- Dependencies: 224
+-- Data for Name: bookings; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.bookings (booking_id, user_id, showtime_id, seat_id, hall_id, status) FROM stdin;
+1	1	2	8	1	booked
+2	1	2	7	1	booked
+3	1	1	1	1	booked
+4	1	1	2	1	booked
+5	1	1	3	1	booked
+6	1	1	4	1	booked
+7	1	2	5	1	booked
+8	1	2	6	1	booked
+9	1	2	8	1	booked
+10	1	2	7	1	booked
+11	1	2	5	1	booked
+12	1	2	6	1	booked
+13	1	1	1	1	booked
+\.
+
+
+--
+-- TOC entry 4959 (class 0 OID 24886)
+-- Dependencies: 221
+-- Data for Name: hall; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hall (hall_id, status) FROM stdin;
+1	not available
+\.
+
+
+--
+-- TOC entry 4957 (class 0 OID 24869)
+-- Dependencies: 219
+-- Data for Name: movies; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.movies (movie_id, title, duration, genre, rating, status) FROM stdin;
+1	Interstellar	02:49:00	science fiction drama	4.9	available
+2	The Gentlemen	01:53:00	crime comedy	4.6	available
+3	Inglourious Basterds	02:33:00	war	3.8	available
+\.
+
+
+--
+-- TOC entry 4961 (class 0 OID 24906)
+-- Dependencies: 223
+-- Data for Name: seats; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.seats (seat_id, showtime_id, hall_id, number, "row", status, movie_id) FROM stdin;
+6	2	1	2	a	booked	1
+1	1	1	1	a	booked	1
+2	1	1	2	a	available	1
+3	1	1	1	b	available	1
+4	1	1	2	b	available	1
+7	2	1	1	b	available	1
+8	2	1	2	b	available	1
+5	2	1	1	a	booked	1
+\.
+
+
+--
+-- TOC entry 4960 (class 0 OID 24891)
+-- Dependencies: 222
+-- Data for Name: showtimes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.showtimes (showtime_id, movie_id, hall_id, showtimes, date) FROM stdin;
+1	1	1	10:00	02.03.2025
+2	1	1	12:00	02.03.2025
+\.
+
+
+--
+-- TOC entry 4958 (class 0 OID 24874)
+-- Dependencies: 220
+-- Data for Name: theater_reviews; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.theater_reviews (review_id, user_id, grade, feedback, status) FROM stdin;
+1	1	5.0	good	available
+\.
+
+
+--
+-- TOC entry 4955 (class 0 OID 24854)
+-- Dependencies: 217
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (user_id, username, email) FROM stdin;
+1	Anuar	kenzhibekovanuar@gmail.com
+2	dwad	dawda
+\.
+
+
+--
+-- TOC entry 4956 (class 0 OID 24859)
+-- Dependencies: 218
+-- Data for Name: users_roles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users_roles (user_id, client, admin) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4974 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: bookings_booking_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.bookings_booking_id_seq', 13, true);
+
+
+--
+-- TOC entry 4975 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: seats_seat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.seats_seat_id_seq', 1, false);
+
+
+--
+-- TOC entry 4976 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: showtime_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.showtime_id_seq', 1, false);
+
+
+--
+-- TOC entry 4977 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: theater_reviews_review_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.theater_reviews_review_id_seq', 1, true);
+
+
+--
+-- TOC entry 4978 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 2, true);
+
+
+--
+-- TOC entry 4797 (class 2606 OID 24925)
+-- Name: bookings bookings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bookings
+    ADD CONSTRAINT bookings_pkey PRIMARY KEY (booking_id);
+
+
+--
+-- TOC entry 4791 (class 2606 OID 24890)
+-- Name: hall hall_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hall
+    ADD CONSTRAINT hall_pkey PRIMARY KEY (hall_id);
+
+
+--
+-- TOC entry 4787 (class 2606 OID 24873)
+-- Name: movies movies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.movies
+    ADD CONSTRAINT movies_pkey PRIMARY KEY (movie_id);
+
+
+--
+-- TOC entry 4795 (class 2606 OID 24910)
+-- Name: seats seats_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seats
+    ADD CONSTRAINT seats_pkey PRIMARY KEY (seat_id);
+
+
+--
+-- TOC entry 4793 (class 2606 OID 24895)
+-- Name: showtimes showtimes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.showtimes
+    ADD CONSTRAINT showtimes_pkey PRIMARY KEY (showtime_id);
+
+
+--
+-- TOC entry 4789 (class 2606 OID 24880)
+-- Name: theater_reviews theater_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.theater_reviews
+    ADD CONSTRAINT theater_reviews_pkey PRIMARY KEY (review_id);
+
+
+--
+-- TOC entry 4779 (class 2606 OID 32985)
+-- Name: users unique_email; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT unique_email UNIQUE (email);
+
+
+--
+-- TOC entry 4781 (class 2606 OID 32987)
+-- Name: users unique_username; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT unique_username UNIQUE (username);
+
+
+--
+-- TOC entry 4785 (class 2606 OID 24863)
+-- Name: users_roles user_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users_roles
+    ADD CONSTRAINT user_roles_pkey PRIMARY KEY (user_id);
+
+
+--
+-- TOC entry 4783 (class 2606 OID 24858)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- TOC entry 4805 (class 2606 OID 24941)
+-- Name: bookings bookings_hall_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bookings
+    ADD CONSTRAINT bookings_hall_id_fkey FOREIGN KEY (hall_id) REFERENCES public.hall(hall_id);
+
+
+--
+-- TOC entry 4806 (class 2606 OID 24936)
+-- Name: bookings bookings_seat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bookings
+    ADD CONSTRAINT bookings_seat_id_fkey FOREIGN KEY (seat_id) REFERENCES public.seats(seat_id);
+
+
+--
+-- TOC entry 4807 (class 2606 OID 24931)
+-- Name: bookings bookings_showtime_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bookings
+    ADD CONSTRAINT bookings_showtime_id_fkey FOREIGN KEY (showtime_id) REFERENCES public.showtimes(showtime_id);
+
+
+--
+-- TOC entry 4808 (class 2606 OID 24926)
+-- Name: bookings bookings_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bookings
+    ADD CONSTRAINT bookings_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id);
+
+
+--
+-- TOC entry 4809 (class 2606 OID 24956)
+-- Name: bookings fk_hall_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bookings
+    ADD CONSTRAINT fk_hall_id FOREIGN KEY (hall_id) REFERENCES public.hall(hall_id);
+
+
+--
+-- TOC entry 4802 (class 2606 OID 33047)
+-- Name: seats fk_movie; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seats
+    ADD CONSTRAINT fk_movie FOREIGN KEY (movie_id) REFERENCES public.movies(movie_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4803 (class 2606 OID 24916)
+-- Name: seats seats_hall_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seats
+    ADD CONSTRAINT seats_hall_id_fkey FOREIGN KEY (hall_id) REFERENCES public.hall(hall_id);
+
+
+--
+-- TOC entry 4804 (class 2606 OID 24911)
+-- Name: seats seats_showtime_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seats
+    ADD CONSTRAINT seats_showtime_id_fkey FOREIGN KEY (showtime_id) REFERENCES public.showtimes(showtime_id);
+
+
+--
+-- TOC entry 4800 (class 2606 OID 24901)
+-- Name: showtimes showtimes_hall_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.showtimes
+    ADD CONSTRAINT showtimes_hall_id_fkey FOREIGN KEY (hall_id) REFERENCES public.hall(hall_id);
+
+
+--
+-- TOC entry 4801 (class 2606 OID 24896)
+-- Name: showtimes showtimes_movie_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.showtimes
+    ADD CONSTRAINT showtimes_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public.movies(movie_id);
+
+
+--
+-- TOC entry 4799 (class 2606 OID 24881)
+-- Name: theater_reviews theater_reviews_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.theater_reviews
+    ADD CONSTRAINT theater_reviews_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id);
+
+
+--
+-- TOC entry 4798 (class 2606 OID 24864)
+-- Name: users_roles user_roles_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users_roles
+    ADD CONSTRAINT user_roles_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id);
+
+
+-- Completed on 2025-02-10 19:40:08
+
+--
+-- PostgreSQL database dump complete
+--
+
