@@ -1,13 +1,14 @@
 package Services;
 
 import Entity.Showtimes;
-
 import Repositories.ShowtimeRepository;
 import DataBase.DatabaseManager;
 import java.util.List;
 import java.util.Scanner;
 
 public class ShowtimesService implements ShowtimesActions {
+
+    // Ask user to select a showtime
     public void askShowtime() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -22,9 +23,10 @@ public class ShowtimesService implements ShowtimesActions {
             }
 
             try {
+                // Parse showtime ID
                 int showtimeId = Integer.parseInt(inputShowtime);
                 SeatsService seatsService = new SeatsService();
-                seatsService.displayAvailableSeats(showtimeId);
+                seatsService.displayAvailableSeats(showtimeId); // Display available seats
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("-------------------------------------------------------------------------");
@@ -33,8 +35,7 @@ public class ShowtimesService implements ShowtimesActions {
         }
     }
 
-
-
+    // Display showtimes for a specific movie
     public void displayShowtimes(int movieId) {
         try {
             DatabaseManager dbManager = new DatabaseManager();
@@ -47,15 +48,16 @@ public class ShowtimesService implements ShowtimesActions {
                 System.out.println("\u001B[31mNo showtimes found for the movie. Please try later!\u001B[0m");
                 MoviesService moviesService = new MoviesService();
                 MoviesService.ConsoleMovieQueryStrategy queryStrategy = moviesService.new ConsoleMovieQueryStrategy();
-                queryStrategy.askMovie();
+                queryStrategy.askMovie(); // Retry if no showtimes are found
             } else {
+                // Print all available showtimes for the movie
                 for (Showtimes showtime : showtimeList) {
                     System.out.println(showtime);
                 }
-                askShowtime();
+                askShowtime(); // Ask for a valid showtime
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Handle any errors during the process
         }
     }
 }

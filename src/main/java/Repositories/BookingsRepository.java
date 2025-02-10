@@ -8,10 +8,12 @@ import java.util.List;
 public class BookingsRepository implements BookingsRepositoryInterface {
     private final Connection connection;
 
+    // Constructor to initialize the repository with the database connection
     public BookingsRepository(Connection connection) {
         this.connection = connection;
     }
 
+    // Method to create a new booking in the database
     public boolean createBooking(Bookings booking) throws SQLException {
         String sql = "INSERT INTO bookings (user_id, showtime_id, seat_id, hall_id, status) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -21,22 +23,23 @@ public class BookingsRepository implements BookingsRepositoryInterface {
             stmt.setInt(4, booking.getHallId());
             stmt.setString(5, booking.getStatus());
 
-            int rowsAffected = stmt.executeUpdate();
+            int rowsAffected = stmt.executeUpdate();  // Execute the update and check the number of affected rows
             if (rowsAffected > 0) {
-                return true;
-                    }
-                }
-            return false;
+                return true;  // Return true if the booking was successfully created
             }
+        }
+        return false;  // Return false if the booking creation failed
+    }
 
+    // Method to retrieve all bookings made by a specific user
     public List<Bookings> getBookingsByUserId(int userId) throws SQLException {
         String sql = "SELECT * FROM bookings WHERE user_id = ?";
-        List<Bookings> bookings = new ArrayList<>();
+        List<Bookings> bookings = new ArrayList<>();  // List to store bookings
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, userId);
 
-            try (ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = stmt.executeQuery()) {  // Execute the query and iterate through the result set
                 while (rs.next()) {
                     bookings.add(new Bookings(
                             rs.getInt("booking_id"),
@@ -49,9 +52,10 @@ public class BookingsRepository implements BookingsRepositoryInterface {
                 }
             }
         }
-        return bookings;
+        return bookings;  // Return the list of bookings
     }
 
+    // Method to retrieve a specific booking by its ID
     public Bookings getBookingById(int bookingId) throws SQLException {
         String sql = "SELECT * FROM bookings WHERE booking_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -70,15 +74,16 @@ public class BookingsRepository implements BookingsRepositoryInterface {
                 }
             }
         }
-        return null;
+        return null;  // Return null if no booking was found for the given ID
     }
 
-    public  boolean confirmBooking(int bookingId) throws SQLException {
+    // Method to confirm a booking by updating its status to 'confirmed'
+    public boolean confirmBooking(int bookingId) throws SQLException {
         String sql = "UPDATE bookings SET status = 'confirmed' WHERE booking_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, bookingId);
-            return stmt.executeUpdate() > 0;
+            return stmt.executeUpdate() > 0;  // Return true if the booking was successfully confirmed
         }
     }
 }

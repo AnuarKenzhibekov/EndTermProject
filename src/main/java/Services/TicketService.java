@@ -12,7 +12,7 @@ import Repositories.ShowtimeRepository;
 
 import java.sql.SQLException;
 
-public class TicketService {
+public class TicketService implements TicketActions {
 
     private final DatabaseManager dbManager;
     private final BookingsRepository bookingRepository;
@@ -20,6 +20,7 @@ public class TicketService {
     private final ShowtimeRepository showtimeRepository;
     private final SeatsRepository seatsRepository;
 
+    // Constructor to initialize repositories
     public TicketService(DatabaseManager dbManager) {
         this.dbManager = dbManager;
         this.bookingRepository = new BookingsRepository(dbManager.getConnection());
@@ -28,29 +29,38 @@ public class TicketService {
         this.seatsRepository = new SeatsRepository(dbManager.getConnection());
     }
 
+    // Method to print the ticket details
     public void printTicket(int bookingId) {
+        final String GREEN = "\033[0;32m"; // Color code for green
+        final String RESET = "\033[0m";   // Reset color code
+
         try {
+            // Fetch booking details using bookingId
             Bookings booking = bookingRepository.getBookingById(bookingId);
             if (booking == null) {
-                System.out.println("Booking not found.");
+                System.out.println(GREEN + "Booking not found." + RESET);
                 return;
             }
 
+            // Fetch related movie, showtime, and seat details
             Movies movie = movieRepository.getMovieById(booking.getShowtimeId());
             Showtimes showtime = showtimeRepository.getShowtimeById(booking.getShowtimeId());
             Seats seat = seatsRepository.getSeatById(booking.getSeatId());
 
-            System.out.println("===== Cinema Ticket =====");
-            System.out.println("Movie: " + movie.getTitle());
-            System.out.println("Genre: " + movie.getGenre());
-            System.out.println("Duration: " + movie.getDuration());
-            System.out.println("Date: " + showtime.getDate());
-            System.out.println("Showtime: " + showtime.getShowtime());
-            System.out.println("Hall: " + showtime.getHallId());
-            System.out.println("Seat: Row " + seat.getRow() + ", Number " + seat.getNumber());
-            System.out.println("=========================");
+            // Print the ticket details
+            System.out.println(GREEN + "===== Cinema Ticket =====" + RESET);
+            System.out.println(GREEN + "Movie: " + movie.getTitle() + RESET);
+            System.out.println(GREEN + "Genre: " + movie.getGenre() + RESET);
+            System.out.println(GREEN + "Duration: " + movie.getDuration() + RESET);
+            System.out.println(GREEN + "Date: " + showtime.getDate() + RESET);
+            System.out.println(GREEN + "Showtime: " + showtime.getShowtime() + RESET);
+            System.out.println(GREEN + "Hall: " + showtime.getHallId() + RESET);
+            System.out.println(GREEN + "Seat: Row " + seat.getRow() + ", Number " + seat.getNumber() + RESET);
+            System.out.println(GREEN + "=========================" + RESET);
         } catch (SQLException e) {
-            System.out.println("Error fetching ticket details: " + e.getMessage());
+            // Handle any SQL exceptions during ticket details fetching
+            System.out.println(GREEN + "Error fetching ticket details: " + e.getMessage() + RESET);
         }
     }
+
 }
