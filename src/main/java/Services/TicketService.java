@@ -44,7 +44,7 @@ public class TicketService implements TicketActions {
 
             // Fetch related movie, showtime, and seat details
             Movies movie = movieRepository.getMovieById(booking.getShowtimeId());
-            Showtimes showtime = showtimeRepository.getShowtimeById(booking.getShowtimeId());
+            Showtimes showtime = showtimeRepository.getShowtimeById(bookingId);
             Seats seat = seatsRepository.getSeatById(booking.getSeatId());
 
             // Print the ticket details

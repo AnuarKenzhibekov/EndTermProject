@@ -44,35 +44,37 @@ public class MoviesService implements MovieActions {
                 System.out.println("-------------------------------------------------------------------------");
                 System.out.println("\u001B[32mWhat movie do you want? (write number) ↓\u001B[0m");
 
-                String askMovie;
                 while (true) {
-                    askMovie = scanner.nextLine();
+                    String askMovie = scanner.nextLine();
 
-                    // Check if input is a valid number
+                    // Check if the input is a valid number
                     if (askMovie.matches("\\d+")) {
                         int movieId = Integer.parseInt(askMovie);
 
-                        // Fetch and display movie details
+                        // Fetch the movie by ID
                         Movies movie = movierep.getMovieById(movieId);
                         if (movie != null) {
                             System.out.println("-------------------------------------------------------------------------");
                             System.out.println("\u001B[32mYour movie: " + movie.getTitle() + "\u001B[0m");
+
+                            // Display showtimes for the selected movie
                             ShowtimesService showtimesService = new ShowtimesService();
                             showtimesService.displayShowtimes(movieId);
-                            break;
+                            break; // Exit the loop after successful selection
                         } else {
-                            System.out.println("\u001B[33mMovie not found!\u001B[0m");
-                            break;
+                            System.out.println("-------------------------------------------------------------------------");
+                            System.out.println("\u001B[33mMovie not found! Try again.\u001B[0m");
+                            System.out.println("-------------------------------------------------------------------------");
                         }
                     } else {
                         System.out.println("-------------------------------------------------------------------------");
-                        System.out.println("\u001B[33mWrite a valid Number!\u001B[0m");
-                        askMovie(); // Retry if input is not a number
+                        System.out.println("\u001B[33mWrite a valid number!\u001B[0m");
                     }
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
+
     }
 }

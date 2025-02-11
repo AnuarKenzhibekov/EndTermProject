@@ -29,14 +29,14 @@ public class MovieRepository implements MovieRepositoryInterface {
                     String genre = rs.getString("genre");
                     String duration = rs.getString("duration");
 
-                    // Return a Movies object with retrieved details
                     return new Movies(title, genre, duration);
                 } else {
-                    throw new SQLException("Movie not found for ID: " + movieId); // Movie not found exception
+                    return null;
                 }
             }
         }
     }
+
 
     // Method to retrieve all movies from the database
     public List<Movies> getAllMovies() throws SQLException {

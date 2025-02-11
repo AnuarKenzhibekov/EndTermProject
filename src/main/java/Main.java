@@ -1,7 +1,8 @@
 import Entity.Beginning;
 import Services.UserService;
 
-public class Main {
+public class
+Main {
     public static void main(String[] args) {
         // Create an instance of Beginning and start the process
         Beginning beg = new Beginning();
